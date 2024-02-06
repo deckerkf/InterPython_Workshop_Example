@@ -2,6 +2,7 @@
 
 import pandas as pd
 import pytest
+import numpy as np
 
 def test_max_mag_integers():
     # Test that max_mag function works for integers
@@ -47,3 +48,31 @@ def test_max_mag_strings():
     test_input_colname = "b"
     with pytest.raises(TypeError):
         error_expected = max_mag('string', test_input_colname)
+
+rng = np.random.default_rng(seed=42)
+df1 = pd.DataFrame(rng.random((3, 3)), columns=list("abc"))
+output1 = np.max(df1['b'])
+
+@pytest.mark.parametrize(
+    "test_df, test_colname, expected",
+    [
+        (pd.DataFrame(data=[[1, 5, 3], 
+                            [7, 8, 9], 
+                            [3, 4, 1]], 
+                      columns=list("abc")),
+        "a",
+        7),
+        (pd.DataFrame(data=[[0, 0, 0], 
+                            [0, 0, 0], 
+                            [0, 0, 0]], 
+                      columns=list("abc")),
+        "b",
+        0),
+        (df1,
+         "b",
+         pytest.approx(output1,0.01))
+    ])
+def test_max_mag(test_df, test_colname, expected):
+    """Test max function works for array of zeroes, positive integers, and random floats."""
+    from lcanalyzer.models import max_mag
+    assert max_mag(test_df, test_colname) == expected
