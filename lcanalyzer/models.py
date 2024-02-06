@@ -3,7 +3,8 @@
 The Model layer is responsible for the 'business logic' part of the software.
 
 The lightcurves are saved in a table (2D array) where each row corresponds to a single observation. 
-Depending on the dataset (LSST or Kepler), a table can contain observations of a single or several objects, 
+Depending on the dataset (LSST or Kepler), 
+a table can contain observations of a single or several objects, 
 in a single or different bands.
 
 Functions:
@@ -14,7 +15,6 @@ Functions:
 """
 
 import pandas as pd
-import numpy as np
 from astropy.timeseries import LombScargle
 
 def load_dataset(filename):
