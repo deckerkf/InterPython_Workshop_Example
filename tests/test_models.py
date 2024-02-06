@@ -3,6 +3,7 @@
 import pandas as pd
 import pytest
 import numpy as np
+import pandas.testing as pdt
 
 def test_max_mag_integers():
     # Test that max_mag function works for integers
@@ -76,3 +77,35 @@ def test_max_mag(test_df, test_colname, expected):
     """Test max function works for array of zeroes, positive integers, and random floats."""
     from lcanalyzer.models import max_mag
     assert max_mag(test_df, test_colname) == expected
+
+
+
+def test_calc_stats():
+    
+    test_cols = list("abc")
+    test_dict = {}
+    test_dict["df0"] = pd.DataFrame(
+        data=[[8, 8, 0], 
+              [0, 1, 1], 
+              [2, 3, 1], 
+              [7, 9, 7]], columns=test_cols
+    )
+    test_dict["df1"] = pd.DataFrame(
+        data=[[3, 8, 2], 
+              [3, 8, 0], 
+              [3, 9, 8], 
+              [8, 2, 5]], columns=test_cols
+    )
+    test_dict["df2"] = pd.DataFrame(
+        data=[[8, 4, 3], 
+              [7, 6, 3], 
+              [4, 2, 9], 
+              [6, 4, 0]], columns=test_cols
+    )
+    test_output = pd.DataFrame(data=[[9,9,6],[5.25,6.75,4.],[1,2,2]],
+                               columns=['df0','df1','df2'],index=['max','mean','min'])
+    from lcanalyzer.models import calc_stats
+    pdt.assert_frame_equal(calc_stats(test_dict, test_dict.keys(), 'b'),
+                              test_output,
+                             check_exact=False,
+                             atol=0.01)

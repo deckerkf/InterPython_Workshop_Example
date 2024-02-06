@@ -50,3 +50,14 @@ def min_mag(data,mag_col):
     :returns: The min value of the column.
     """
     return data[mag_col].min()
+
+def calc_stats(lc, bands, mag_col):
+    # Calculate max, mean and min values for all bands of a light curve
+    stats = {}
+    for b in bands:
+        stat = {}
+        stat["max"] = max_mag(lc[b], mag_col)
+        stat["mean"] = mean_mag(lc[b], mag_col)
+        stat["min"] = min_mag(lc[b], mag_col)
+        stats[b] = stat
+    return pd.DataFrame.from_records(stats)
