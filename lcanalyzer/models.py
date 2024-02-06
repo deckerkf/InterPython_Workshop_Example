@@ -61,3 +61,13 @@ def calc_stats(lc, bands, mag_col):
         stat["min"] = min_mag(lc[b], mag_col)
         stats[b] = stat
     return pd.DataFrame.from_records(stats)
+
+def normalize_lc(df,mag_col):
+    # Normalize a light curve
+    if any(df[mag_col].abs() > 90):
+        raise ValueError(mag_col+' contains values with abs() larger than 90!')
+    min = min_mag(df,mag_col)
+    max = max_mag((df-min),mag_col)
+    lc = (df[mag_col]-min)/max
+    lc = lc.fillna(0)
+    return lc
