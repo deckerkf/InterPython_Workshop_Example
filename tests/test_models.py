@@ -4,6 +4,9 @@ import pandas as pd
 import pytest
 import numpy as np
 import pandas.testing as pdt
+rng = np.random.default_rng(seed=42)
+df1 = pd.DataFrame(rng.random((3, 3)), columns=list("abc"))
+output1 = np.max(df1['b'])
 
 def test_max_mag_integers():
     # Test that max_mag function works for integers
@@ -50,9 +53,6 @@ def test_max_mag_strings():
     with pytest.raises(TypeError):
         error_expected = max_mag('string', test_input_colname)
 
-rng = np.random.default_rng(seed=42)
-df1 = pd.DataFrame(rng.random((3, 3)), columns=list("abc"))
-output1 = np.max(df1['b'])
 
 @pytest.mark.parametrize(
     "test_df, test_colname, expected",
