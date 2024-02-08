@@ -81,6 +81,8 @@ def test_max_mag(test_df, test_colname, expected):
 
 
 def test_calc_stats():
+    """ Test calc_stats works for a set of three dataframes"""
+    from lcanalyzer.models import calc_stats
     
     test_cols = list("abc")
     test_dict = {}
@@ -103,12 +105,12 @@ def test_calc_stats():
               [6, 4, 0]], columns=test_cols
     )
     test_output = pd.DataFrame(data=[[9,9,6],[5.25,6.75,4.],[1,2,2]],
-                               columns=['df0','df1','df2'],index=['max','mean','min'])
-    from lcanalyzer.models import calc_stats
-    pdt.assert_frame_equal(calc_stats(test_dict, test_dict.keys(), 'b'),
-                              test_output,
-                             check_exact=False,
-                             atol=0.01)
+                               columns=["df0","df1","df2"],index=["max","mean","min"])
+    
+    pdt.assert_frame_equal(calc_stats(test_dict, test_dict.keys(), "b"),
+                           test_output,
+                           check_exact=False,
+                           atol=0.01)
 
 # Parametrization for normalize_lc function testing with ValueError
 @pytest.mark.parametrize(
@@ -153,6 +155,15 @@ def test_normalize_lc(test_input_df, test_input_colname, expected,expected_raise
     import pandas.testing as pdt
     if expected_raises is not None:
         with pytest.raises(expected_raises):
-            pdt.assert_series_equal(normalize_lc(test_input_df,test_input_colname),expected,check_exact=False,atol=0.01,check_names=False)
+            pdt.assert_series_equal(normalize_lc(test_input_df,test_input_colname),
+                                    expected,
+                                    check_exact=False,
+                                    atol=0.01,
+                                    check_names=False)
     else:
-        pdt.assert_series_equal(normalize_lc(test_input_df,test_input_colname),expected,check_exact=False,atol=0.01,check_names=False)
+        pdt.assert_series_equal(normalize_lc(test_input_df,test_input_colname),
+                                expected,
+                                check_exact=False,
+                                atol=0.01,
+                                check_names=False)
+        
