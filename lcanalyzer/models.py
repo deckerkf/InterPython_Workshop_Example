@@ -54,7 +54,12 @@ def min_mag(data, mag_col):
 
 
 def calc_stats(lc, bands, mag_col):
-    # Calculate max, mean and min values for all bands of a light curve
+    """Calculate max, mean and min values for all bands of a light curve
+    :param lc: Dictionary of pd.DataFrame with observed magnitudes for a single source.
+    :param bands: a string with the magnitude band names.
+    :param mag_col: a string with the name of the column for calculating the min value.
+    :returns: pd.DataFrame with max, mean, and min values.
+    """
     stats = {}
     for b in bands:
         stat = {}
@@ -66,9 +71,14 @@ def calc_stats(lc, bands, mag_col):
 
 
 def normalize_lc(df, mag_col):
-    # Normalize a light curve
+    """Normalize a light curve.
+    :param df: pd.DataFrame with observed magnitudes for a single source.
+    :param mag_col: a string with the name of the column for calculating the min value.
+    :returns: pd.Series of normalized magnitude values.
+    """
     if any(df[mag_col].abs() > 90):
         raise ValueError(mag_col + " contains values with abs() larger than 90!")
+        
     min_data = min_mag(df, mag_col)
     max_data = max_mag((df - min_data), mag_col)
     lc = (df[mag_col] - min_data) / max_data
